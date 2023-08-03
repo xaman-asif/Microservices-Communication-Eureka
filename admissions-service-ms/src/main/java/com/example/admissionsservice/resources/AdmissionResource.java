@@ -4,6 +4,7 @@ import com.example.admissionsservice.resources.models.DiseasesList;
 import com.example.admissionsservice.resources.models.EmployeesList;
 import com.example.admissionsservice.resources.models.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,12 +18,13 @@ import java.util.List;
 public class AdmissionResource {
 
     @Autowired
+//    @LoadBalanced
     private RestTemplate restTemplate;
 
     @RequestMapping("/physicians")
     public EmployeesList getPhysicians() {
         EmployeesList employeesList =
-                restTemplate.getForObject("http://localhost:8082/hr/employees", EmployeesList.class);
+                restTemplate.getForObject("http://hr-service/hr/employees", EmployeesList.class);
 
         return employeesList;
     }
@@ -30,7 +32,7 @@ public class AdmissionResource {
     @RequestMapping("/diseases")
     public DiseasesList getDiseases() {
         DiseasesList diseasesList =
-                restTemplate.getForObject("http://localhost:8083/pathology/diseases", DiseasesList.class);
+                restTemplate.getForObject("http://pathology-service/pathology/diseases", DiseasesList.class);
 
         return diseasesList;
     }
